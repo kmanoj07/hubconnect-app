@@ -33,3 +33,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Astra ###
+secure-connect-hub-connect.zip
