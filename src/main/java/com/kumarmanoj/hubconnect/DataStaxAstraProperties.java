@@ -1,21 +1,22 @@
 package com.kumarmanoj.hubconnect;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
+
 
 import java.io.File;
 
-@Component
+@Configuration
 @ConfigurationProperties(prefix = "datastax.astra")
 public class DataStaxAstraProperties {
 
-    private File secureConnectHubConnectBundle;
+    private File secureConnectBundle;
 
-    public File getSecureConnectHubConnectBundle() {
-        return secureConnectHubConnectBundle;
+    public File getSecureConnectBundle() {
+        return secureConnectBundle;
     }
 
-    public void setSecureConnectHubConnectBundle(File secureConnectHubConnectBundle) {
-        this.secureConnectHubConnectBundle = secureConnectHubConnectBundle;
+    public void setSecureConnectBundle(File secureConnectBundle) {
+        this.secureConnectBundle = secureConnectBundle;
     }
 }

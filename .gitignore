@@ -36,3 +36,5 @@ build/
 
 ### Astra ###
 secure-connect-hub-connect.zip
+application.properties
+application_old.yml
