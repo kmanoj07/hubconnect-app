@@ -74,24 +74,27 @@
         </header>
 
         <nav>
-            <div class="card">
-                <div class="card-header">
-                    Folders
-                </div>
-                <div class="card-body">
-                <ul class="list-group">
-                    <li th:each="folder: ${userFolders}" class="list-group-item d-flex justify-content-between align-items-center">
-                        <span th:text="${folder.label}">Label</span>
-                        <span class="badge bg-primary rounded-pill">14</span>
-                    </li>
-                </ul>
-                </div>
-            </div>
+            <!-- Rendering the default folder for evey user-->
+            <div th:insert="components/folder-list :: folder-list (panelName='Folders', folders=${defaultFolders})"></div>
+            <div th:insert="components/folder-list :: folder-list (panelName='User Folders', folders=${userFolders})"></div>
 
         </nav>
 
         <main>
-            <p>Email List</p>
+            <div class="card" th:if="${emailLists}">
+                <div class="card-header">MailBox</div>
+                <div class="card-body">
+                    <div class="list-group">
+                        <a th:each="message: ${emailLists}" href="#" class="list-group-item list-group-item-action">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1" th:text="${message.subject}">Subject</h5>
+                                <small th:text="${message.getAgoTimeString()}">0 days ago</small>
+                            </div>
+                            <p class="mb-1" th:text="${message.to}">Some placeholder content in a paragraph.</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </main>
 
         <footer>

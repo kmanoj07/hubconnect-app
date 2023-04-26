@@ -3,6 +3,10 @@ package com.kumarmanoj.hubconnect;
 import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
+import com.datastax.oss.driver.api.core.uuid.Uuids;
+import com.kumarmanoj.hubconnect.emaillist.EmailListItem;
+import com.kumarmanoj.hubconnect.emaillist.EmailListItemKey;
+import com.kumarmanoj.hubconnect.emaillist.EmailListItemRepository;
 import com.kumarmanoj.hubconnect.folders.Folder;
 import com.kumarmanoj.hubconnect.folders.FolderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +33,8 @@ public class HubConnectApplication {
 
     @Autowired
     private FolderRepository folderRepository;
+    @Autowired
+    private EmailListItemRepository listItemRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(HubConnectApplication.class, args);
@@ -54,9 +60,25 @@ public class HubConnectApplication {
 
     @PostConstruct
     public void init() {
-        folderRepository.save(new Folder("koushikkothagal", "HubConnect","red"));
-        folderRepository.save(new Folder("manojCode94", "sent", "green"));
+        folderRepository.save(new Folder("manojCode94", "MailBox","red"));
+        folderRepository.save(new Folder("manojCode94", "Sent", "green"));
         folderRepository.save (new Folder("manojCode94", "Important", "yellow"));
+
+        for(int i=0;i<10;i++){
+            EmailListItemKey key = new EmailListItemKey();
+            key.setId("manojCode94");
+            key.setLabel("MailBox");
+            key.setTimeUUID(Uuids.timeBased());
+
+            EmailListItem item = new EmailListItem();
+            item.setKey(key);
+            item.setTo(Arrays.asList("manojCode94"));
+            item.setSubject("Subject" + i);
+            item.setUnread(true);
+
+            //persist
+            listItemRepository.save(item);
+        }
     }
 
 

@@ -63,6 +63,11 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.ocpsoft.prettytime</groupId>
+            <artifactId>prettytime</artifactId>
+            <version>5.0.1.Final</version>
+        </dependency>
 
         <dependency>
             <groupId>com.datastax.oss</groupId>
