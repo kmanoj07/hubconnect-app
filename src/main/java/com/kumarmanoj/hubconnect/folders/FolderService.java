@@ -10,8 +10,8 @@ public class FolderService {
     public List<Folder> fetchDefaultFolders(String userId) {
         // Always return the default folder
         return Arrays.asList(
-                new Folder(userId, "Inobx", "white"),
-                new Folder(userId, "Sent Items", "green"),
+                new Folder(userId, "Inbox", "white"),
+                new Folder(userId, "Sent", "green"),
                 new Folder(userId, "Important", "blue")
         );
     }

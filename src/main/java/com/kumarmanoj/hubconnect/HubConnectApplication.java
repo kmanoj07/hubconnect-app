@@ -4,6 +4,8 @@ import com.datastax.oss.driver.api.core.CqlSession;
 import com.datastax.oss.driver.api.core.cql.ResultSet;
 import com.datastax.oss.driver.api.core.cql.Row;
 import com.datastax.oss.driver.api.core.uuid.Uuids;
+import com.kumarmanoj.hubconnect.email.Email;
+import com.kumarmanoj.hubconnect.email.EmailRepository;
 import com.kumarmanoj.hubconnect.emaillist.EmailListItem;
 import com.kumarmanoj.hubconnect.emaillist.EmailListItemKey;
 import com.kumarmanoj.hubconnect.emaillist.EmailListItemRepository;
@@ -35,6 +37,8 @@ public class HubConnectApplication {
     private FolderRepository folderRepository;
     @Autowired
     private EmailListItemRepository listItemRepository;
+    @Autowired
+    private EmailRepository emailRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(HubConnectApplication.class, args);
@@ -60,24 +64,34 @@ public class HubConnectApplication {
 
     @PostConstruct
     public void init() {
-        folderRepository.save(new Folder("manojCode94", "MailBox","red"));
+        folderRepository.save(new Folder("manojCode94", "Inbox","red"));
         folderRepository.save(new Folder("manojCode94", "Sent", "green"));
         folderRepository.save (new Folder("manojCode94", "Important", "yellow"));
 
         for(int i=0;i<10;i++){
             EmailListItemKey key = new EmailListItemKey();
             key.setId("manojCode94");
-            key.setLabel("MailBox");
+            key.setLabel("Inbox");
             key.setTimeUUID(Uuids.timeBased());
 
             EmailListItem item = new EmailListItem();
             item.setKey(key);
-            item.setTo(Arrays.asList("manojCode94"));
+            item.setTo(Arrays.asList("manojCode94", "manojCode94"));
             item.setSubject("Subject" + i);
             item.setUnread(true);
 
             //persist
             listItemRepository.save(item);
+
+            //persist to email
+            Email email = new Email();
+            email.setTimeUUID(key.getTimeUUID());
+            email.setFrom("manojCode94");
+            email.setSubject(item.getSubject());
+            email.setBody("Body "+ i);
+            email.setTo(item.getTo());
+
+            emailRepository.save(email);
         }
     }
 

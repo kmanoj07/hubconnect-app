@@ -1,46 +1,41 @@
 package com.kumarmanoj.hubconnect.controllers;
 
-import com.datastax.oss.driver.api.core.uuid.Uuids;
-import com.kumarmanoj.hubconnect.emaillist.EmailListItem;
+import com.kumarmanoj.hubconnect.email.Email;
+import com.kumarmanoj.hubconnect.email.EmailRepository;
 import com.kumarmanoj.hubconnect.emaillist.EmailListItemRepository;
 import com.kumarmanoj.hubconnect.folders.Folder;
 import com.kumarmanoj.hubconnect.folders.FolderRepository;
 import com.kumarmanoj.hubconnect.folders.FolderService;
-import io.netty.util.internal.StringUtil;
-import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.swing.plaf.synth.SynthTextAreaUI;
-import java.util.Date;
+import java.nio.file.Path;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
-public class HubConnectController {
+public class EmailViewController {
     @Autowired
     private FolderRepository folderRepository;
 
     @Autowired
     private FolderService folderService;
-
     @Autowired
-    private EmailListItemRepository listItemRepository;
+    private EmailRepository emailRepository;
 
-    // check if the user is authenticated - decide page rendering
-    @RequestMapping(path = "/", method = RequestMethod.GET)
-    public String home(@RequestParam(required = false) String folder,
-                       @AuthenticationPrincipal OAuth2User principal,
-                       Model model) {
-        if(principal == null  || !StringUtils.hasText(principal.getAttribute("name"))){
+    @RequestMapping(path = "/emails/{id}", method = RequestMethod.GET)
+    public String emailView(@AuthenticationPrincipal OAuth2User principal,
+                            @PathVariable UUID id,
+                            Model model) {
+        if (principal == null || !StringUtils.hasText(principal.getAttribute("name"))) {
             return "index";
         }
 //        System.out.println(principal);
@@ -57,23 +52,16 @@ public class HubConnectController {
         //put the userFolders in model to access on  template
         model.addAttribute("defaultFolders", defaultFolders);
 
-        // Email List By user's Folder
-//        String folderLabel = "MailBox";
-        if(!StringUtils.hasText(folder)) {
-            folder = "Inbox";
+        //Get Emails
+        Optional<Email> optionalEmail= emailRepository.findById(id);
+        if(optionalEmail.isEmpty()){
+            return "hubconnect-page";
         }
-        List<EmailListItem>  emailListItems =  listItemRepository.findAllByKey_IdAndKey_Label(userId, folder);
-        PrettyTime prettyTime = new PrettyTime();
-
-        emailListItems.stream().forEach(emailItem -> {
-            UUID timeUuID = emailItem.getKey().getTimeUUID();
-            Date emailDateTime = new Date(Uuids.unixTimestamp(timeUuID));
-            emailItem.setAgoTimeString(prettyTime.format(emailDateTime));
-        });
-
-        model.addAttribute("emailLists", emailListItems);
-        model.addAttribute("folderName", folder);
-
-       return "hubconnect-page";
+//        System.out.println("Email " + optionalEmail.get());
+        Email email = optionalEmail.get();
+        String toIds = String.join(", " , email.getTo());
+        model.addAttribute("email", email);
+        model.addAttribute("toIds", toIds);
+        return "email-page";
     }
 }
