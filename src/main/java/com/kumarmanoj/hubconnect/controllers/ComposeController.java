@@ -1,5 +1,7 @@
 package com.kumarmanoj.hubconnect.controllers;
 
+import com.kumarmanoj.hubconnect.email.Email;
+import com.kumarmanoj.hubconnect.email.EmailRepository;
 import com.kumarmanoj.hubconnect.email.EmailService;
 import com.kumarmanoj.hubconnect.folders.Folder;
 import com.kumarmanoj.hubconnect.folders.FolderRepository;
@@ -14,29 +16,25 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
 public class ComposeController {
-
     @Autowired
     private FolderRepository folderRepository;
-
     @Autowired
     private FolderService folderService;
-
     @Autowired
     private EmailService emailService;
+    @Autowired private EmailRepository emailRepository;
 
     @RequestMapping(path = "/compose", method = RequestMethod.GET)
     public String getComposePage(
             @RequestParam(required = false) String to,
-                                 @AuthenticationPrincipal OAuth2User principal,
-                                 Model model) {
+            @RequestParam(required = false) UUID id,
+            @AuthenticationPrincipal OAuth2User principal,
+            Model model) {
         if(principal == null  || !StringUtils.hasText(principal.getAttribute("name"))){
             return "index";
         }
@@ -56,6 +54,16 @@ public class ComposeController {
 
         List<String> uniqueToIds = getStrings(to);
         model.addAttribute("toIds", String.join(", ", uniqueToIds));
+
+        //Get Emails
+        Optional<Email> optionalEmail= emailRepository.findById(id);
+        if(optionalEmail.isPresent()){
+            Email email = optionalEmail.get();
+            if(emailService.doesHaveAccess(email, userId)) {
+                model.addAttribute("subject", emailService.getReplySubject(email.getSubject()));
+                model.addAttribute("body", emailService.getReplyBody(email));
+            }
+        }
 
         return "compose-page";
     }

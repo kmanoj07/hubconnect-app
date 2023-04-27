@@ -43,6 +43,10 @@
         footer {
             grid-area: footer;
         }
+        .body-text {
+            white-space: pre-wrap;
+        }
+
         @media (max-width: 768px) {
             .container {
                 grid-template-areas:
@@ -100,11 +104,11 @@
                     <dt>Subject</dt>
                     <dd th:text="${email.subject}"></dd>
                     <dt>Message</dt>
-                    <dd th:text="${email.body}"></dd>
+                    <dd class="body-text" th:text="${email.body}"></dd>
                 </dl>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a th:href="@{'/compose?to=' + ${email.from}}" class="btn btn-primary me-md-2" type="button">Reply</a>
-                    <a th:href="@{'/compose?to=' + ${toIds} + ', ' + ${email.from}}" class="btn btn-primary" type="button">Reply All</a>
+                    <a th:href="@{'/compose?to=' + ${email.from} + '&id=' + ${email.getTimeUUID()}}" class="btn btn-primary me-md-2" type="button">Reply</a>
+                    <a th:href="@{'/compose?to=' + ${toIds} + ', ' + ${email.from} + '&id=' + ${email.getTimeUUID()}}" class="btn btn-primary" type="button">Reply All</a>
                 </div>
             </div>
         </div>
