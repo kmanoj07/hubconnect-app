@@ -1,5 +1,5 @@
 # HubConnect-app
-## Connect with your GitHub connection outside Github using messages.
+## Connect with your GitHub connection outside Github using.
 ### Note: please add application.properties file in resource folder
 
 ### Copy paste properties to do GitHub OAuth authentication
