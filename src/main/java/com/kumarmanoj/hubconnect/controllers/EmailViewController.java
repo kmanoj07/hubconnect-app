@@ -67,8 +67,15 @@ public class EmailViewController {
 //        System.out.println("Email " + optionalEmail.get());
         Email email = optionalEmail.get();
         String toIds = String.join(", " , email.getTo());
+
+        //check if user is allowed to see the email
+        if(!userId.equals(email.getFrom()) && !email.getTo().contains(userId)){
+            return "redirect:/";
+        }
+
         model.addAttribute("email", email);
         model.addAttribute("toIds", toIds);
+        model.addAttribute("user", principal.getAttribute("name"));
 
         EmailListItemKey key = new EmailListItemKey();
         key.setId(userId);

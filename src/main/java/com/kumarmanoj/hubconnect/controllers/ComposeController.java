@@ -52,6 +52,7 @@ public class ComposeController {
         //put the userFolders in model to access on  template
         model.addAttribute("defaultFolders", defaultFolders);
         model.addAttribute("unreadStats", folderService.mapCountToLabels(userId));
+        model.addAttribute("user", principal.getAttribute("name"));
 
         List<String> uniqueToIds = getStrings(to);
         model.addAttribute("toIds", String.join(", ", uniqueToIds));

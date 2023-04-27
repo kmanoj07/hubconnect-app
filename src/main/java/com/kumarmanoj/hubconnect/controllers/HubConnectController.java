@@ -53,7 +53,7 @@ public class HubConnectController {
         model.addAttribute("defaultFolders", defaultFolders);
         //read unreadcount
         model.addAttribute("unreadStats", folderService.mapCountToLabels(userId));
-
+        model.addAttribute("user", principal.getAttribute("name"));
         // Fetch emails by user's folder
         if(!StringUtils.hasText(folder)) {
             folder = "Inbox";

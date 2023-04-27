@@ -64,6 +64,8 @@ public class HubConnectApplication {
         for(int i=0;i<10;i++){
             emailService.sendEmail("manojCode94", Arrays.asList("manojCode94", "abc"), "Hello" + i, "body " + i);
         }
+
+        emailService.sendEmail("abc", Arrays.asList("manojCode94"), "test", "not allowed");
     }
 
 
