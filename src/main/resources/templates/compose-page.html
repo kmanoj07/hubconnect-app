@@ -74,34 +74,35 @@
     </header>
 
     <nav>
-        <div class="card">
-            <a href="/compose" type="button" class="btn btn-primary">Compose Message</a>
-        </div>
         <!-- Rendering the default folder for evey user-->
         <div th:insert="components/folder-list :: folder-list (panelName='Folders', folders=${defaultFolders})"></div>
         <div th:insert="components/folder-list :: folder-list (panelName='User Folders', folders=${userFolders})"></div>
-
     </nav>
-
     <main>
-        <div class="card" th:if="${email}">
-            <div class="card-header">View Email</div>
-            <div class="card-body">
-                <dl>
-                    <dt>From</dt>
-                    <dd th:text="${email.from}"></dd>
-                    <dt>To</dt>
-                    <dd th:text="${toIds}"></dd>
-                    <dt>Subject</dt>
-                    <dd th:text="${email.subject}"></dd>
-                    <dt>Message</dt>
-                    <dd th:text="${email.body}"></dd>
-                </dl>
-                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a th:href="@{'/compose?to=' + ${email.from}}" class="btn btn-primary me-md-2" type="button">Reply</a>
-                    <a th:href="@{'/compose?to=' + ${toIds} + ', ' + ${email.from}}" class="btn btn-primary" type="button">Reply All</a>
-                </div>
-            </div>
+        <div class="card" >
+            <div class="card-header">Create New Email</div>
+            <dl class="card-body">
+                <form th:attr="action=@{/sendEmail}" method="POST">
+                    <input type="hidden"
+                           th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}"
+                           />
+                    <div class="mb-3">
+                        <label for="toIds" class="form-label">To</label>
+                        <input type="text" th:value="${toIds}" class="form-control" name="toIds" id="toIds">
+                        <div id="toIdHelp" class="form-text">Enter comma seperated GitHub IDs of your Recipients </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Subject</label>
+                        <input type="text" class="form-control" name="subject" id="subject">
+                    </div>
+                    <div class="mb-3">
+                        <label for="body" class="form-label">Email Message</label>
+                        <textarea rows="10" class="form-control"  name="body" id="body"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </dl>
         </div>
     </main>
 

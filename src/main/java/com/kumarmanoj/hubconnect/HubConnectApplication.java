@@ -11,6 +11,7 @@ import com.kumarmanoj.hubconnect.emaillist.EmailListItemKey;
 import com.kumarmanoj.hubconnect.emaillist.EmailListItemRepository;
 import com.kumarmanoj.hubconnect.folders.Folder;
 import com.kumarmanoj.hubconnect.folders.FolderRepository;
+import com.kumarmanoj.hubconnect.folders.UnreadEmailStatsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -39,11 +40,12 @@ public class HubConnectApplication {
     private EmailListItemRepository listItemRepository;
     @Autowired
     private EmailRepository emailRepository;
+    @Autowired
+    private UnreadEmailStatsRepository emailStatsRepository;
 
     public static void main(String[] args) {
         SpringApplication.run(HubConnectApplication.class, args);
     }
-
 //    @RequestMapping("/user")
 //    @ResponseBody
 //    public String user(@AuthenticationPrincipal OAuth2User principal) {
@@ -68,6 +70,11 @@ public class HubConnectApplication {
         folderRepository.save(new Folder("manojCode94", "Sent", "green"));
         folderRepository.save (new Folder("manojCode94", "Important", "yellow"));
 
+        // Increment the unreadEmailCount for folder for a user
+        emailStatsRepository.incrementUnreadCount("manojCode94", "Inbox");
+        emailStatsRepository.incrementUnreadCount("manojCode94", "Inbox");
+        emailStatsRepository.incrementUnreadCount("manojCode94", "Inbox");
+
         for(int i=0;i<10;i++){
             EmailListItemKey key = new EmailListItemKey();
             key.setId("manojCode94");
@@ -76,7 +83,7 @@ public class HubConnectApplication {
 
             EmailListItem item = new EmailListItem();
             item.setKey(key);
-            item.setTo(Arrays.asList("manojCode94", "manojCode94"));
+            item.setTo(Arrays.asList("manojCode94", "manojCode94", "test", "abs"));
             item.setSubject("Subject" + i);
             item.setUnread(true);
 

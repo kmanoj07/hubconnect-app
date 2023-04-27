@@ -7,9 +7,7 @@
 
 <div th:fragment="folder-list (panelName, folders)" >
   <div class="card" th:if="${folders}">
-    <div class="card-header" th:text="${panelName}">
-      Folders
-    </div>
+    <div class="card-header" th:text="${panelName}">Folders</div>
     <div class="card-body">
       <ul class="list-group">
         <li th:each="folder: ${folders}" class="list-group-item d-flex justify-content-between align-items-center">
@@ -18,6 +16,7 @@
         </li>
       </ul>
     </div>
+</div>
 </div>
 
 </body>
