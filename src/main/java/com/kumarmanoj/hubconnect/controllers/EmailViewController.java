@@ -2,7 +2,6 @@ package com.kumarmanoj.hubconnect.controllers;
 
 import com.kumarmanoj.hubconnect.email.Email;
 import com.kumarmanoj.hubconnect.email.EmailRepository;
-import com.kumarmanoj.hubconnect.email.EmailService;
 import com.kumarmanoj.hubconnect.emaillist.EmailListItem;
 import com.kumarmanoj.hubconnect.emaillist.EmailListItemKey;
 import com.kumarmanoj.hubconnect.emaillist.EmailListItemRepository;
@@ -28,12 +27,14 @@ import java.util.UUID;
 
 @Controller
 public class EmailViewController {
-    @Autowired private FolderRepository folderRepository;
-    @Autowired private FolderService folderService;
-    @Autowired private EmailRepository emailRepository;
+    @Autowired
+    private FolderRepository folderRepository;
+    @Autowired
+    private FolderService folderService;
+    @Autowired
+    private EmailRepository emailRepository;
     @Autowired private EmailListItemRepository emailListItemRepository;
     @Autowired private UnreadEmailStatsRepository emailStatsRepository;
-    @Autowired private EmailService emailService;
 
     @RequestMapping(path = "/emails/{id}", method = RequestMethod.GET)
     public String emailView(
@@ -68,7 +69,7 @@ public class EmailViewController {
         String toIds = String.join(", " , email.getTo());
 
         //check if user is allowed to see the email
-        if(!emailService.doesHaveAccess(email, userId)) {
+        if(!userId.equals(email.getFrom()) && !email.getTo().contains(userId)){
             return "redirect:/";
         }
 
