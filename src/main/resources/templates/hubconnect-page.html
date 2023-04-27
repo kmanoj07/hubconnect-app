@@ -42,6 +42,7 @@
     footer {
         grid-area: footer;
     }
+
     @media (max-width: 768px) {
         .container {
             grid-template-areas:
@@ -78,8 +79,8 @@
                 <a href="/compose" type="button" class="btn btn-primary">Compose Message</a>
             </div>
             <!-- Rendering the default folder for evey user-->
-            <div th:insert="components/folder-list :: folder-list (panelName='Folders', folders=${defaultFolders})"></div>
-            <div th:insert="components/folder-list :: folder-list (panelName='User Folders', folders=${userFolders})"></div>
+            <div th:insert="components/folder-list :: folder-list (panelName='Folders', folders=${defaultFolders}, unreadStats=${unreadStats})"></div>
+            <div th:insert="components/folder-list :: folder-list (panelName='User Folders', folders=${userFolders}, unreadStats=${unreadStats})"></div>
 
         </nav>
 
@@ -88,12 +89,14 @@
                 <div class="card-header" th:text="${folderName}">Inbox</div>
                 <div class="card-body">
                     <div class="list-group">
-                        <a th:each="message: ${emailLists}" th:href="@{'/emails/'+${message.key.getTimeUUID()}}" class="list-group-item list-group-item-action">
+                        <a th:each="message: ${emailLists}" th:href="@{'/emails/'+${message.key.getTimeUUID() +'?folder='+folderName}}"
+                           class="list-group-item list-group-item-action"
+                           th:classappend="${message.isUnread()} ? 'list-group-item-primary'" >
                             <div class="d-flex w-100 justify-content-between">
                                 <h5 class="mb-1" th:text="${message.subject}">Subject</h5>
                                 <small th:text="${message.getAgoTimeString()}">0 days ago</small>
                             </div>
-                            <p class="mb-1" th:text="${message.to}">Some placeholder content in a paragraph.</p>
+                            <p class="mb-1" th:text="${message.to}">Abc, Def</p>
                         </a>
                     </div>
                 </div>

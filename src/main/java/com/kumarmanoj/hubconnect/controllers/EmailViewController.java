@@ -2,10 +2,13 @@ package com.kumarmanoj.hubconnect.controllers;
 
 import com.kumarmanoj.hubconnect.email.Email;
 import com.kumarmanoj.hubconnect.email.EmailRepository;
+import com.kumarmanoj.hubconnect.emaillist.EmailListItem;
+import com.kumarmanoj.hubconnect.emaillist.EmailListItemKey;
 import com.kumarmanoj.hubconnect.emaillist.EmailListItemRepository;
 import com.kumarmanoj.hubconnect.folders.Folder;
 import com.kumarmanoj.hubconnect.folders.FolderRepository;
 import com.kumarmanoj.hubconnect.folders.FolderService;
+import com.kumarmanoj.hubconnect.folders.UnreadEmailStatsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -15,6 +18,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -25,14 +29,17 @@ import java.util.UUID;
 public class EmailViewController {
     @Autowired
     private FolderRepository folderRepository;
-
     @Autowired
     private FolderService folderService;
     @Autowired
     private EmailRepository emailRepository;
+    @Autowired private EmailListItemRepository emailListItemRepository;
+    @Autowired private UnreadEmailStatsRepository emailStatsRepository;
 
     @RequestMapping(path = "/emails/{id}", method = RequestMethod.GET)
-    public String emailView(@AuthenticationPrincipal OAuth2User principal,
+    public String emailView(
+            @RequestParam String folder,
+            @AuthenticationPrincipal OAuth2User principal,
                             @PathVariable UUID id,
                             Model model) {
         if (principal == null || !StringUtils.hasText(principal.getAttribute("name"))) {
@@ -62,6 +69,23 @@ public class EmailViewController {
         String toIds = String.join(", " , email.getTo());
         model.addAttribute("email", email);
         model.addAttribute("toIds", toIds);
+
+        EmailListItemKey key = new EmailListItemKey();
+        key.setId(userId);
+        key.setLabel(folder);
+        key.setTimeUUID(email.getTimeUUID());
+
+        Optional<EmailListItem> optionalEmailListItem = emailListItemRepository.findById(key);
+        if(optionalEmailListItem.isPresent()){
+            EmailListItem emailListItem =  optionalEmailListItem.get();
+            if(emailListItem.isUnread()){
+                emailListItem.setUnread(false);
+                emailListItemRepository.save(emailListItem);
+                emailStatsRepository.decrementUnreadCount(userId, folder);
+            }
+        }
+        model.addAttribute("unreadStats", folderService.mapCountToLabels(userId));
+
         return "email-page";
     }
 }

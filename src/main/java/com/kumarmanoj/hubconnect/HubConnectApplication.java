@@ -6,6 +6,7 @@ import com.datastax.oss.driver.api.core.cql.Row;
 import com.datastax.oss.driver.api.core.uuid.Uuids;
 import com.kumarmanoj.hubconnect.email.Email;
 import com.kumarmanoj.hubconnect.email.EmailRepository;
+import com.kumarmanoj.hubconnect.email.EmailService;
 import com.kumarmanoj.hubconnect.emaillist.EmailListItem;
 import com.kumarmanoj.hubconnect.emaillist.EmailListItemKey;
 import com.kumarmanoj.hubconnect.emaillist.EmailListItemRepository;
@@ -37,21 +38,11 @@ public class HubConnectApplication {
     @Autowired
     private FolderRepository folderRepository;
     @Autowired
-    private EmailListItemRepository listItemRepository;
-    @Autowired
-    private EmailRepository emailRepository;
-    @Autowired
-    private UnreadEmailStatsRepository emailStatsRepository;
+    private EmailService emailService;
 
     public static void main(String[] args) {
         SpringApplication.run(HubConnectApplication.class, args);
     }
-//    @RequestMapping("/user")
-//    @ResponseBody
-//    public String user(@AuthenticationPrincipal OAuth2User principal) {
-//        System.out.println(principal);
-//        return principal.getAttribute("name");
-//    }
 
     /*
     connect to Astra-db via secure bundle
@@ -66,39 +57,12 @@ public class HubConnectApplication {
 
     @PostConstruct
     public void init() {
-        folderRepository.save(new Folder("manojCode94", "Inbox","red"));
-        folderRepository.save(new Folder("manojCode94", "Sent", "green"));
-        folderRepository.save (new Folder("manojCode94", "Important", "yellow"));
-
-        // Increment the unreadEmailCount for folder for a user
-        emailStatsRepository.incrementUnreadCount("manojCode94", "Inbox");
-        emailStatsRepository.incrementUnreadCount("manojCode94", "Inbox");
-        emailStatsRepository.incrementUnreadCount("manojCode94", "Inbox");
+        folderRepository.save(new Folder("manojCode94", "Work","red"));
+        folderRepository.save(new Folder("manojCode94", "Home", "green"));
+        folderRepository.save (new Folder("manojCode94", "Family", "yellow"));
 
         for(int i=0;i<10;i++){
-            EmailListItemKey key = new EmailListItemKey();
-            key.setId("manojCode94");
-            key.setLabel("Inbox");
-            key.setTimeUUID(Uuids.timeBased());
-
-            EmailListItem item = new EmailListItem();
-            item.setKey(key);
-            item.setTo(Arrays.asList("manojCode94", "manojCode94", "test", "abs"));
-            item.setSubject("Subject" + i);
-            item.setUnread(true);
-
-            //persist
-            listItemRepository.save(item);
-
-            //persist to email
-            Email email = new Email();
-            email.setTimeUUID(key.getTimeUUID());
-            email.setFrom("manojCode94");
-            email.setSubject(item.getSubject());
-            email.setBody("Body "+ i);
-            email.setTo(item.getTo());
-
-            emailRepository.save(email);
+            emailService.sendEmail("manojCode94", Arrays.asList("manojCode94", "abc"), "Hello" + i, "body " + i);
         }
     }
 

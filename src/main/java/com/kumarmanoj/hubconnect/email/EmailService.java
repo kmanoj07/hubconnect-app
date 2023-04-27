@@ -4,6 +4,7 @@ import com.datastax.oss.driver.api.core.uuid.Uuids;
 import com.kumarmanoj.hubconnect.emaillist.EmailListItem;
 import com.kumarmanoj.hubconnect.emaillist.EmailListItemKey;
 import com.kumarmanoj.hubconnect.emaillist.EmailListItemRepository;
+import com.kumarmanoj.hubconnect.folders.UnreadEmailStatsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ public class EmailService {
 
     @Autowired private EmailRepository emailRepository;
     @Autowired private EmailListItemRepository emailListItemRepository;
+    @Autowired private UnreadEmailStatsRepository emailStatsRepository;
 
 
     public void sendEmail(String from, List<String> to, String subject, String body) {
@@ -31,9 +33,11 @@ public class EmailService {
         to.forEach(toId -> {
            EmailListItem item = createEmailListItem(to, subject, email, toId, "Inbox");
            emailListItemRepository.save(item);
+           emailStatsRepository.incrementUnreadCount(toId, "Inbox");
         });
 
         EmailListItem sentItemEntry =  createEmailListItem(to, subject, email, from, "Sent");
+        sentItemEntry.setUnread(false);
         emailListItemRepository.save(sentItemEntry);
     }
 
@@ -42,7 +46,6 @@ public class EmailService {
         key.setId(toId);
         key.setLabel(folder);
         key.setTimeUUID(email.getTimeUUID());
-
         EmailListItem item = new EmailListItem();
         item.setKey(key);
         item.setTo(to);

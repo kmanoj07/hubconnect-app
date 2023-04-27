@@ -78,8 +78,8 @@
             <a href="/compose" type="button" class="btn btn-primary">Compose Message</a>
         </div>
         <!-- Rendering the default folder for evey user-->
-        <div th:insert="components/folder-list :: folder-list (panelName='Folders', folders=${defaultFolders})"></div>
-        <div th:insert="components/folder-list :: folder-list (panelName='User Folders', folders=${userFolders})"></div>
+        <div th:insert="components/folder-list :: folder-list (panelName='Folders', folders=${defaultFolders}, unreadStats=${unreadStats})"></div>
+        <div th:insert="components/folder-list :: folder-list (panelName='User Folders', folders=${userFolders}, unreadStats=${unreadStats})"></div>
 
     </nav>
 
