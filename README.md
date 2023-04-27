@@ -1,4 +1,4 @@
-# HubConnect-app
+# HubConnect App
 ## Connect with your GitHub connection outside Github using.
 ### Note: please add application.properties file in resource folder
 
