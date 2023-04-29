@@ -43,28 +43,32 @@
         footer {
             grid-area: footer;
         }
-        @media (max-width: 768px) {
-            .container {
-                grid-template-areas:
-      "header"
-      "nav"
-      "content"
-      "side"
-      "footer";
-
-                grid-template-columns: 1fr;
-                grid-template-rows:
-      auto /* Header */
-      minmax(75px, auto) /* Nav */
-      1fr /* Content */
-      minmax(75px, auto) /* Sidebar */
-      auto; /* Footer */
-            }
-
-            nav, aside {
-                margin: 0;
-            }
+        .body-text {
+            white-space: pre-wrap;
         }
+
+      /*  @media (max-width: 768px) {*/
+      /*      .container {*/
+      /*          grid-template-areas:*/
+      /*"header"*/
+      /*"nav"*/
+      /*"content"*/
+      /*"side"*/
+      /*"footer";*/
+
+      /*          grid-template-columns: 1fr;*/
+      /*          grid-template-rows:*/
+      /*auto !* Header *!*/
+      /*minmax(75px, auto) !* Nav *!*/
+      /*1fr !* Content *!*/
+      /*minmax(75px, auto) !* Sidebar *!*/
+      /*auto; !* Footer *!*/
+      /*      }*/
+
+      /*      nav, aside {*/
+      /*          margin: 0;*/
+      /*      }*/
+      /*  }*/
     </style>
 
 </head>
@@ -100,11 +104,11 @@
                     <dt>Subject</dt>
                     <dd th:text="${email.subject}"></dd>
                     <dt>Message</dt>
-                    <dd th:text="${email.body}"></dd>
+                    <dd class="body-text" th:text="${email.body}"></dd>
                 </dl>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a th:href="@{'/compose?to=' + ${email.from}}" class="btn btn-primary me-md-2" type="button">Reply</a>
-                    <a th:href="@{'/compose?to=' + ${toIds} + ', ' + ${email.from}}" class="btn btn-primary" type="button">Reply All</a>
+                    <a th:href="@{'/compose?to=' + ${email.from} + '&id=' + ${email.timeUUID}}" class="btn btn-primary me-md-2" type="button">Reply</a>
+                    <a th:href="@{'/compose?to=' + ${toIds} + ', ' + ${email.from} + '&id=' + ${email.timeUUID}}" class="btn btn-primary" type="button">Reply All</a>
                 </div>
             </div>
         </div>
@@ -114,7 +118,5 @@
         <p>HubConnect &copy 2023</p>
     </footer>
 </div>
-
-
 </body>
 </html>

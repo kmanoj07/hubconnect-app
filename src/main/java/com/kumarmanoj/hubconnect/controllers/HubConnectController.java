@@ -32,7 +32,6 @@ public class HubConnectController {
     @Autowired
     private EmailListItemRepository listItemRepository;
 
-
     // check if the user is authenticated - decide page rendering
     @RequestMapping(path = "/", method = RequestMethod.GET)
     public String home(@RequestParam(required = false) String folder,
@@ -54,6 +53,8 @@ public class HubConnectController {
         //read unreadcount
         model.addAttribute("unreadStats", folderService.mapCountToLabels(userId));
         model.addAttribute("user", principal.getAttribute("name"));
+
+
         // Fetch emails by user's folder
         if(!StringUtils.hasText(folder)) {
             folder = "Inbox";

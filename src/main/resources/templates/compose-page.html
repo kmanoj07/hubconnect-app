@@ -43,28 +43,28 @@
         footer {
             grid-area: footer;
         }
-        @media (max-width: 768px) {
-            .container {
-                grid-template-areas:
-      "header"
-      "nav"
-      "content"
-      "side"
-      "footer";
+      /*  @media (max-width: 768px) {*/
+      /*      .container {*/
+      /*          grid-template-areas:*/
+      /*"header"*/
+      /*"nav"*/
+      /*"content"*/
+      /*"side"*/
+      /*"footer";*/
 
-                grid-template-columns: 1fr;
-                grid-template-rows:
-      auto /* Header */
-      minmax(75px, auto) /* Nav */
-      1fr /* Content */
-      minmax(75px, auto) /* Sidebar */
-      auto; /* Footer */
-            }
+      /*          grid-template-columns: 1fr;*/
+      /*          grid-template-rows:*/
+      /*auto !* Header *!*/
+      /*minmax(75px, auto) !* Nav *!*/
+      /*1fr !* Content *!*/
+      /*minmax(75px, auto) !* Sidebar *!*/
+      /*auto; !* Footer *!*/
+      /*      }*/
 
-            nav, aside {
-                margin: 0;
-            }
-        }
+      /*      nav, aside {*/
+      /*          margin: 0;*/
+      /*      }*/
+      /*  }*/
     </style>
 
 </head>
@@ -99,11 +99,11 @@
                     </div>
                     <div class="mb-3">
                         <label for="subject" class="form-label">Subject</label>
-                        <input type="text" class="form-control" name="subject" id="subject">
+                        <input th:value="${subject}" type="text" class="form-control" name="subject" id="subject">
                     </div>
                     <div class="mb-3">
                         <label for="body" class="form-label">Email Message</label>
-                        <textarea rows="10" class="form-control"  name="body" id="body"></textarea>
+                        <textarea th:text="${messageBody}" rows="10" class="form-control"  name="body" id="body"></textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
