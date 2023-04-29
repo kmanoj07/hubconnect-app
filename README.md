@@ -31,6 +31,6 @@
 <p><img src="src/main/resources/images/Reply.png" width="750px" height="650px" /></p>
 <h3>Reply All Page</h3>
 <p><img src="src/main/resources/images/replyall.png" width="750px" height="650px" /></p>
-<h3>Custom Folders Creation (In Progress)...</h3>
+<h3>Custom Folders Creation</h3>
 <p>Users can create their own custom folders and move messages to specific folders to organize their messages and find them easily.</p>
 <p>HubConnect APP is a messaging application that enables GitHub users to communicate with their friends outside of the platform. The app has been built using popular frameworks and tools, and uses a cloud-based database for scalability and high availability. Its features include message threading, counters, and basic messaging features such as composing, replying, and replying all.</p>
