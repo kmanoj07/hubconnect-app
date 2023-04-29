@@ -14,6 +14,7 @@
   <li>Compose message, reply, and reply all</li>
   <li>Maintains message threading</li>
   <li>Maintains message counter in a folder as messages arrive</li>
+   <li>User can track the message had be read or not</li>
 </ul>
 <h1>Features</h1>
 <h3>HubConnect App </h3> 
