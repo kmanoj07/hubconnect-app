@@ -12,9 +12,9 @@
 <ul>
   <li>Users can exchange messages between their GitHub friends</li>
   <li>Compose message, reply, and reply all</li>
-  <li>Maintains message threading</li>
+  <li>Maintains message threads</li>
   <li>Maintains message counter in a folder as messages arrive</li>
-   <li>User can track the message had be read or not</li>
+   <li>User can track the message had been read or not</li>
 </ul>
 <h1>Features</h1>
 <h3>HubConnect App </h3> 
@@ -34,3 +34,6 @@
 <h3>Custom Folders Creation</h3>
 <p>Users can create their own custom folders and move messages to specific folders to organize their messages and find them easily.</p>
 <p>HubConnect APP is a messaging application that enables GitHub users to communicate with their friends outside of the platform. The app has been built using popular frameworks and tools, and uses a cloud-based database for scalability and high availability. Its features include message threading, counters, and basic messaging features such as composing, replying, and replying all.</p>
+</ul>
+<p>Overall, HubConnect APP is a messaging application that enables GitHub users to communicate with their friends outside of the platform. The app has been built using popular frameworks and tools, and uses a cloud-based database for scalability and high availability. Its features include message threading, counters, and basic messaging functionality such as composing, replying, and replying all.</p>
+
