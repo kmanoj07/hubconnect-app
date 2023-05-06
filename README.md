@@ -5,7 +5,7 @@
   <li>Java</li>
   <li>Spring Boot</li>
   <li>Spring Security OAuth2 using GitHub</li>
-  <li>Astra DB Cassandra on Datastax cloud</li>
+  <li>Cassandra on Datastax cloud</li>
 </ul>
 <p>Cloud hosted <strong>Cassandra database</strong> link: <a href="https://www.datastax.com/" target="_blank">DataStax</a></p>
 <h2>Features</h2>
